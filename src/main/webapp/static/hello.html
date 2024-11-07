@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Hello Page</title>
+    </head>
+    <body>
+        <h1>Hello, World!</h1>
+    <br/>
+    <form method="post" action="/CurrencyExchanger/cool-servlet">
+        <label>
+            <input name="phone">
+        </label>
+        <button type="submit">Send Phone</button>
+    </form>
+    <br/>
+    <form method="post" action="/CurrencyExchanger/file-servlet" enctype="multipart/form-data">
+        <label>
+            <input type="text" name="author">
+            <input type="file" name="file-name">
+        </label>
+        <button>Send</button>
+    </form>
+    </body>
+</html>
