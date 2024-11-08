@@ -4,18 +4,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Currency {
-    private int id;
-    private String name;
-    private String code;
-    private String sign;
+    private final int id;
+    private final String name;
+    private final String code;
+    private final String sign;
+
     public Currency(int id, String name, String code, String sign) {
         this.id = id;
         this.name = name;
         this.code = code;
         this.sign = sign;
     }
-    public Currency() {}
-
     public int getId() {
         return id;
     }
@@ -31,22 +30,6 @@ public class Currency {
         return name;
     }
 
-    public void setSign(String sign) {
-        this.sign = sign;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public static Currency fromResultSet(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
         String name = rs.getString("name");
@@ -55,11 +38,20 @@ public class Currency {
         return new Currency(id, name, code, sign);
     }
 
-    public static Currency fromResultSet(ResultSet rs, String prefix) throws SQLException {
+    public static Currency fromResultSetWithPrefix(ResultSet rs, String prefix) throws SQLException {
         int id = rs.getInt(prefix + "CurrencyId");
         String name = rs.getString(prefix + "CurrencyName");
         String code = rs.getString(prefix + "CurrencyCode");
         String sign = rs.getString(prefix + "CurrencySign");
         return new Currency(id, name, code, sign);
+    }
+
+    public String toJson() {
+        return "{" +
+                "\"id\": " + getId() + ", " +
+                "\"name\": \"" + getName() + "\", " +
+                "\"code\": \"" + getCode() + "\", " +
+                "\"sign\": \"" + getSign() + "\"" +
+                "}";
     }
 }

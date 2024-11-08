@@ -4,13 +4,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import service.ServletService;
+import service.CurrencyService;
 
 import java.io.*;
 
 @WebServlet(urlPatterns = {"/currencies/*"})
 public class Currencies extends HttpServlet {
-    ServletService service = new ServletService();
+    private final CurrencyService service = new CurrencyService();
+
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
@@ -23,6 +24,4 @@ public class Currencies extends HttpServlet {
             response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
         }
     }
-
-
 }
