@@ -19,7 +19,7 @@ public class CurrencyDAOImpl implements CurrencyDAO {
 
     @Override
     public Currency getCurrency(String currency) throws SQLException {
-        String sql = "SELECT * FROM currencies WHERE code = ?";
+        String sql = "SELECT * FROM Currencies WHERE code = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1, currency);
         ResultSet rs = statement.executeQuery();
@@ -31,7 +31,7 @@ public class CurrencyDAOImpl implements CurrencyDAO {
 
     @Override
     public List<Currency> getAllCurrencies() throws SQLException {
-        String sql = "SELECT * FROM currencies";
+        String sql = "SELECT * FROM Currencies";
         PreparedStatement statement = connection.prepareStatement(sql);
         ResultSet rs = statement.executeQuery();
         List<Currency> currencies = new ArrayList<>();

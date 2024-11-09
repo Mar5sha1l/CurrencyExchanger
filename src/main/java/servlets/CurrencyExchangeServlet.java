@@ -9,10 +9,11 @@ import service.ExchangeRateService;
 import java.io.IOException;
 
 @WebServlet("/exchange")
-public class CurrencyExchange extends HttpServlet {
-
+public class CurrencyExchangeServlet extends HttpServlet {
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         ExchangeRateService service = new ExchangeRateService();
+        System.out.println("exchange servlet");
         service.exchangeCurrency(request, response);
     }
 }

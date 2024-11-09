@@ -33,7 +33,7 @@ public class ExchangeRate {
     }
 
     public static ExchangeRate fromResultSet(ResultSet rs) throws SQLException {
-        int id = rs.getInt("ID");
+        int id = rs.getInt("exchangeRateId");
         Currency baseCurrency = Currency.fromResultSetWithPrefix(rs, "base");
         Currency targetCurrency = Currency.fromResultSetWithPrefix(rs, "target");
         double rate = rs.getDouble("rate");

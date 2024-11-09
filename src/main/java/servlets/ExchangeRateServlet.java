@@ -9,7 +9,7 @@ import service.ExchangeRateService;
 import java.io.IOException;
 
 @WebServlet(urlPatterns = {"/exchangeRate/*", "/exchangeRates"})
-public class ExchangeRates extends HttpServlet {
+public class ExchangeRateServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ExchangeRateService service = new ExchangeRateService();

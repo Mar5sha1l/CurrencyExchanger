@@ -7,11 +7,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.ExchangeRate;
 import model.ExchangeTransaction;
 import utils.Utils;
+import utils.exceptions.MissingParameterException;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+
+import static utils.Utils.validateParameter;
 
 public class ExchangeRateService {
     public void getExchangeRates(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -47,17 +50,24 @@ public class ExchangeRateService {
         try (Connection connection = DatabaseConnection.getConnection()) {
             ExchangeRateDAO exchangeRateDAO = new ExchangeRateDAOImpl(connection);
             response.setContentType("application/json");
+            try {
+                String baseCurrencyCode = validateParameter(request, "baseCurrencyCode");
+                String targetCurrencyCode = validateParameter(request, "targetCurrencyCode");
+                String rateParam = validateParameter(request, "rate");
 
-            String baseCurrencyCode = request.getParameter("baseCurrencyCode");
-            String targetCurrencyCode = request.getParameter("targetCurrencyCode");
-            double rate = Double.parseDouble(request.getParameter("rate"));
+                double rate = Double.parseDouble(rateParam);
 
-            boolean isAdded = exchangeRateDAO.addExchangeRate(baseCurrencyCode, targetCurrencyCode, rate);
 
-            if (isAdded) {
-                response.getWriter().println("{\"message\": \"Exchange rate added successfully\"}");
-            } else {
-                response.getWriter().println("{\"error\": \"Unable to add exchange rate\"}");
+                boolean isAdded = exchangeRateDAO.addExchangeRate(baseCurrencyCode, targetCurrencyCode, rate);
+
+                if (isAdded) {
+                    response.getWriter().println("{\"message\": \"Exchange rate added successfully\"}");
+                } else {
+                    response.getWriter().println("{\"error\": \"Unable to add exchange rate\"}");
+                }
+            } catch (MissingParameterException e) {
+                response.getWriter().println("{\"error\": \"" + e.getMessage() + "\"}");
+                e.printStackTrace();
             }
 
         } catch (SQLException e) {

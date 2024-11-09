@@ -8,8 +8,8 @@ import service.CurrencyService;
 
 import java.io.*;
 
-@WebServlet(urlPatterns = {"/currencies/*"})
-public class Currencies extends HttpServlet {
+@WebServlet(urlPatterns = {"/currencies", "/currency/*"})
+public class CurrencyServlet extends HttpServlet {
     private final CurrencyService service = new CurrencyService();
 
     @Override

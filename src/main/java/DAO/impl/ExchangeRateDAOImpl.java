@@ -70,24 +70,27 @@ public class ExchangeRateDAOImpl implements ExchangeRateDAO {
     @Override
     public ExchangeRate getExchangeRate(String baseCurrencyCode, String targetCurrencyCode) throws SQLException {
         String sql = """
-            SELECT bc.ID AS baseCurrencyId, bc.name AS baseCurrencyName, bc.code AS baseCurrencyCode, bc.sign AS baseCurrencySign,
-                   tc.ID AS targetCurrencyId, tc.name AS targetCurrencyName, tc.code AS targetCurrencyCode, tc.sign AS targetCurrencySign,
-                   er.rate
-            FROM ExchangeRates er
-            JOIN Currencies bc ON er.baseCurrencyId = bc.ID
-            JOIN Currencies tc ON er.targetCurrencyId = tc.ID
-            WHERE bc.code = ? AND tc.code = ?
-        """;
+        SELECT er.id AS exchangeRateId, bc.ID AS baseCurrencyId, bc.name AS baseCurrencyName, bc.code AS baseCurrencyCode, bc.sign AS baseCurrencySign,
+               tc.ID AS targetCurrencyId, tc.name AS targetCurrencyName, tc.code AS targetCurrencyCode, tc.sign AS targetCurrencySign,
+               er.rate
+        FROM ExchangeRates er
+        JOIN Currencies bc ON er.baseCurrencyId = bc.ID
+        JOIN Currencies tc ON er.targetCurrencyId = tc.ID
+        WHERE bc.code = ? AND tc.code = ?
+    """;
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, baseCurrencyCode);
             stmt.setString(2, targetCurrencyCode);
-            ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                return ExchangeRate.fromResultSet(rs);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return ExchangeRate.fromResultSet(rs);
+                }
+                return null;
             }
-            return null;
+        } catch (SQLException e) {
+            throw new SQLException("Error fetching exchange rate for " + baseCurrencyCode + " to " + targetCurrencyCode, e);
         }
     }
 
